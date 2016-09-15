@@ -109,7 +109,7 @@ for dirs, subdirs, files in os.walk('./'):
 			window_min = window
 		if count == 0 or window > window_max:
 			window_max = window
-		check_file = dirs + "/PDI.us." + window_string + ".run01.dat"
+		check_file = dirs + "/PDI_com.job0." + window_string + ".sort.colvars.traj"
 		print "Checking " + check_file
 		if os.path.isfile(check_file):
 			# open file and create histogram
@@ -140,7 +140,7 @@ for dirs, subdirs, files in os.walk('./'):
 				if index not in range(total_bins):
 					print 'Timestep %d is trying to be binned in index %d...' %(j,index)
 				
-				if index == total_bins: # Data points binned into the last bin don't have a bin to go to so we move them to the last actual bin. Index of -1 is last index. -2 would be second to last..
+				if index == total_bins: # Data points binned into the last bin don't have a bin to go to so we move them to the last actual bin. Index of -1 is last index. -2 would be second to last...
 					weighted_counts[-1] += np.exp(restraint_const * (datalist[j][1] - restraint_position)**2)/(weighting_constant * datalist[j][1]**2) # nSteps*dist_delta ---> normalizes the probability density; 4.0*np.pi*datalist[j][1]**2 ---> volume correction
 					counts[-1] += 1
 				else:
@@ -197,13 +197,13 @@ np.savetxt(output_hist_name,end_hist)
 end_counts = np.column_stack((col_var,bin_counts))
 np.savetxt(counts_out,end_counts)
 
-#end_r_free = np.column_stack((col_var,temp_r_free))
-#np.savetxt(r_free_out,end_r_free)
+##end_r_free = np.column_stack((col_var,temp_r_free))
+##np.savetxt(r_free_out,end_r_free)
 
 pmf_vert_correction = np.loadtxt(pmf_vert)
 print temp_u_free.shape
-for j in range(len(temp_u_free[1])):
-	for i in range(len(temp_u_free[0])):
+for j in range(temp_u_free.shape[1]):
+	for i in range(temp_u_free.shape[0]):
 		temp_u_free[i][j] += pmf_vert_correction[j]
 
 end_u_free = np.column_stack((col_var,temp_u_free))
